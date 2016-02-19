@@ -1,5 +1,6 @@
 from flask import Flask, Response
 
+
 class MyResponse(Response):
      default_mimetype = 'application/json'
 
@@ -17,5 +18,9 @@ def create_app(config_filename):
     # Blueprints
     from app.users.views import users
     app.register_blueprint(users, url_prefix='/users')
+
+    # Twitter fetch module
+    # TODO: Move twitter module
+
 
     return app
