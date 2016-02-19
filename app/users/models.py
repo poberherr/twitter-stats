@@ -1,11 +1,12 @@
 from marshmallow_jsonapi import Schema, fields
 from marshmallow import validate
-from app.basemodels import db
+from app.basemodels import db, CRUD
 
-class Users(db.Model):
+class Users(db.Model, CRUD):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    twitter_id = db.Column(db.Integer, unique=True)
     name = db.Column(db.String(250))
     screen_name = db.Column(db.String(250))
     location = db.Column(db.String(250))
@@ -21,7 +22,21 @@ class Users(db.Model):
     modified_at = db.Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
 
-#    def __init__():
+    def __init__(self, twitter_id, name, screen_name, location, description, url,
+        followers_count, friends_count, created_at, favourites_count, time_zone,
+        statuses_count):
+        self.twitter_id = twitter_id
+        self.name = name
+        self.screen_name = screen_name
+        self.location = location
+        self.description = description
+        self.url = url
+        self.followers_count = followers_count
+        self.friends_count = friends_count
+        self.created_at = created_at
+        self.favourites_count = favourites_count
+        self.time_zone = time_zone
+        self.statuses_count = statuses_count
 
 
 # TODO: Be smarter and use : http://marshmallow-sqlalchemy.readthedocs.org/en/latest/recipes.html
@@ -29,7 +44,8 @@ class UsersSchema(Schema):
 
     not_blank = validate.Length(min=1, error='Field cannot be blank')
 
-    id = fields.Integer()
+    id = fields.Integer(dump_only=True)
+    twitter_id = fields.Integer()
     name = fields.String()
     screen_name = fields.String()
     location = fields.String()

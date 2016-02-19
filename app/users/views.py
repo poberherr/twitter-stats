@@ -44,22 +44,6 @@ class UserFetch(Resource):
 class UserByName(Resource):
 
     def get(self, name):
-<<<<<<< Updated upstream
-=======
-
-        # ckey="JJwDjqFg4IW372BcwiVkkhQ1Z"
-        # csecret="s0QMMvm6dpeF7uRqoetTkJjVrd56Co7cLWJ4p1SNTJKtYnzLdP"
-        # atoken="48399689-yd0KnEE24Ye1bf21iu2KlQmwvMCkPrU0p3eMWKNbR"
-        # asecret="bBE12wEEP9Kyp7kVUZUQjVFhnHbldikqQM58b5cAQ0yw5"
-        #
-        # auth = OAuthHandler(ckey, csecret)
-        # auth.set_access_token(atoken, asecret)
-        #
-        # api = tweepy.API(auth)
-        # Get information about the user
-
-        # user_data = api.get_user(name)
->>>>>>> Stashed changes
         user_data = fetch_user_by_name(name)
 
         user = Users( user_data.id,
