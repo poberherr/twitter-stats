@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.users.models import Users, UsersSchema, db
-from app.twitter_fetch import fetch_user_by_name
+from app.twitter_fetch import fetch_user_by_name, get_followers
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -45,12 +45,10 @@ class UserByName(Resource):
 
     def get(self, name):
         user_data = fetch_user_by_name(name)
+        # all_friends = get_followers(user_data.id)
+        # print(all_friends)
 
-        user = Users( user_data.id,
-            user_data.name, user_data.screen_name, user_data.location,
-            user_data.description, user_data.url, user_data.followers_count,
-            user_data.friends_count, user_data.created_at, user_data.favourites_count,
-            user_data.time_zone, user_data.statuses_count)
+        user = Users(user_data)
         try:
             user.add(user)
         except IntegrityError:

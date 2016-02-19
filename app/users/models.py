@@ -22,21 +22,19 @@ class Users(db.Model, CRUD):
     modified_at = db.Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
 
-    def __init__(self, twitter_id, name, screen_name, location, description, url,
-        followers_count, friends_count, created_at, favourites_count, time_zone,
-        statuses_count):
-        self.twitter_id = twitter_id
-        self.name = name
-        self.screen_name = screen_name
-        self.location = location
-        self.description = description
-        self.url = url
-        self.followers_count = followers_count
-        self.friends_count = friends_count
-        self.created_at = created_at
-        self.favourites_count = favourites_count
-        self.time_zone = time_zone
-        self.statuses_count = statuses_count
+    def __init__(self, user_data):
+        self.twitter_id = user_data.id
+        self.name = user_data.name
+        self.screen_name = user_data.screen_name
+        self.location = user_data.location
+        self.description = user_data.description
+        self.url = user_data.url
+        self.followers_count = user_data.followers_count
+        self.friends_count = user_data.friends_count
+        self.created_at = user_data.created_at
+        self.favourites_count = user_data.favourites_count
+        self.time_zone = user_data.time_zone
+        self.statuses_count = user_data.statuses_count
 
 
 # TODO: Be smarter and use : http://marshmallow-sqlalchemy.readthedocs.org/en/latest/recipes.html
