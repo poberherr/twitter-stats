@@ -7,9 +7,10 @@ def fetch_user_by_name(name):
     return user_data
 
 def fetch_followers(id):
-    ids = []
-    for page in tweepy.Cursor(api.followers_ids, id=id).pages():
-        pageid = pageid + 1
-        ids.extend(page)
-
-    return ids
+    '''
+        Might overflow when follower count goes insane.
+        The most popular version yo find out there is to slow,
+        so I go with the simple approach for now
+    '''
+    follower_ids = api.followers_ids(id)
+    return follower_ids
