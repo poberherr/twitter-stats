@@ -1,12 +1,14 @@
 from marshmallow_jsonapi import Schema, fields
 from marshmallow import validate
 from app.basemodels import db, CRUD
+from app.followers.models import FollowerSchema, Followers
+
 
 class Users(db.Model, CRUD):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    twitter_id = db.Column(db.Integer, unique=True)
+    twitter_id = db.Column(db.BigInteger, unique=True)
     name = db.Column(db.String(250))
     screen_name = db.Column(db.String(250))
     location = db.Column(db.String(250))
@@ -58,7 +60,7 @@ class UsersSchema(Schema):
     statuses_count = fields.Integer()
 
 
-     #self links
+    # self links
     def get_top_level_links(self, data, many):
         if many:
             self_link = "/users/"

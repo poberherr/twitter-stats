@@ -1,15 +1,12 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.users.models import Users, UsersSchema, db
-from app.twitter_fetch import fetch_user_by_name, get_followers
+from app.twitter_fetch.fetch import fetch_user_by_name
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.exc import IntegrityError
 
 from marshmallow import ValidationError
-
-from tweepy import OAuthHandler
-import tweepy
 
 
 users = Blueprint('users', __name__)
@@ -32,33 +29,47 @@ class UsersList(Resource):
         return results
 
 
-
 class UserFetch(Resource):
 
     def get(self, id):
-        users_query = Users.query.get_or_404(id)
-        result = schema.dump(users_query).data
+        user = Users.query.get_or_404(id)
+        result = schema.dump(user).data
         return result
 
-
-class UserByName(Resource):
-
-    def get(self, name):
-        user_data = fetch_user_by_name(name)
-        # all_friends = get_followers(user_data.id)
-        # print(all_friends)
-
-        user = Users(user_data)
+    def delete(self, id):
+        user = Users.query.get_or_404(id)
         try:
+            delete = user.delete(user)
+            response = make_response()
+            response.status_code = 204
+            return response
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            resp = jsonify({"error": str(e)})
+            resp.status_code = 401
+            return resp
+
+
+class UserFetchByName(Resource):
+
+    def get(self, screen_name):
+        user = Users.query.filter_by(screen_name=screen_name).first()
+        if user:
+            result = schema.dump(user).data
+            return result, 200
+        else:
+            user_data = fetch_user_by_name(screen_name)
+            user = Users(user_data)
             user.add(user)
-        except IntegrityError:
-            return 'User was already fetched', 409
+            query = Users.query.get(user.id)
+            results = schema.dump(query).data
+            return results, 201
 
-        query = Users.query.get(user.id)
-        results = schema.dump(query).data
-        return results, 201
-
+        # TODO: Call here the fetching of all the friends from the "main" user
+        # so that the request can return and the fetching takes place in the
+        # background
 
 api.add_resource(UsersList, '')
 api.add_resource(UserFetch, '/<int:id>')      # Retriving fetched users
-api.add_resource(UserByName, '/<name>')     # Fetch a user by name from twitter
+api.add_resource(UserFetchByName, '/<screen_name>')     # Fetch a user by name from twitter
