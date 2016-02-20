@@ -19,6 +19,9 @@ def create_app(config_filename):
     from app.users.views import users
     app.register_blueprint(users, url_prefix='/users')
 
+    from app.followers.views import followers
+    app.register_blueprint(followers, url_prefix='/followers')
+
     # Twitter fetch module
     # TODO: Move twitter module
 
