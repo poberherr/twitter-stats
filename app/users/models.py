@@ -21,6 +21,7 @@ class Users(db.Model, CRUD):
     favourites_count = db.Column(db.Integer)
     time_zone = db.Column(db.String(250))
     statuses_count = db.Column(db.Integer)
+    is_follower_fetched = db.Column(db.Boolean, default=False)
     modified_at = db.Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
 

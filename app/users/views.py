@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.users.models import Users, UsersSchema, db
-from app.twitter_fetch.fetch import fetch_user_by_name
+from app.twitter_fetch.fetch import fetch_and_create_user_by_id
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -59,11 +59,9 @@ class UserFetchByName(Resource):
             result = schema.dump(user).data
             return result, 200
         else:
-            user_data = fetch_user_by_name(screen_name)
-            user = Users(user_data)
-            user.add(user)
-            query = Users.query.get(user.id)
-            results = schema.dump(query).data
+            twitter_id = twitter_screen_name_to_id(screen_name)
+            user = fetch_and_create_user_by_id(twitter_id)
+            results = schema.dump(user).data
             return results, 201
 
         # TODO: Call here the fetching of all the friends from the "main" user
