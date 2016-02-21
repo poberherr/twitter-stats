@@ -50,3 +50,9 @@ def fetch_user_network(twitter_id, depth, max_depth):
         for follower in all_user_followers:
             fetch_user_network(follower, depth + 1, max_depth)
     return
+
+def fetch_tweets_by_screen_name(screen_name):
+    #  TODO: retrieve set of tweet id's and compare with db content_type
+    # after finding the 'new' one's: insert
+    tweet_data = api.user_timeline(screen_name=screen_name, count=100)
+    return tweet_data

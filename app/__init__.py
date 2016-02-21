@@ -25,6 +25,8 @@ def create_app(config_filename):
     from app.fetch_network.views import fetch_network
     app.register_blueprint(fetch_network, url_prefix='/fetch_network')
 
+    from app.tweets.views import tweets
+    app.register_blueprint(tweets, url_prefix='/tweets')
 
     # Twitter fetch module
     # TODO: Move twitter module

@@ -1,6 +1,7 @@
 from marshmallow_jsonapi import Schema, fields
 from marshmallow import validate
 from app.basemodels import db, CRUD
+# TODO: Create tests
 from app.followers.models import FollowerSchema, Followers
 
 
