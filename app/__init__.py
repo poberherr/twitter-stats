@@ -22,6 +22,10 @@ def create_app(config_filename):
     from app.followers.views import followers
     app.register_blueprint(followers, url_prefix='/followers')
 
+    from app.fetch_network.views import fetch_network
+    app.register_blueprint(fetch_network, url_prefix='/fetch_network')
+
+
     # Twitter fetch module
     # TODO: Move twitter module
 
