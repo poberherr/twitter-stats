@@ -2,7 +2,7 @@ from flask import Blueprint
 
 from app.followers.models import Followers, FollowerSchema
 from app.users.models import Users
-from app.twitter_fetch.fetch import fetch_followers
+from app.twitter_fetch.fetch import get_followers
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,33 +15,16 @@ api = Api(followers)
 class FollowFetch(Resource):
 
     def get(self, id):
-        followers = Followers.query.filter_by(user_id=id).all()
-        if followers:
-            follower_ids = []
-            for follower in followers:
-                follower_ids.append(follower.twitter_follower_id)
+        user = Users.query.get_or_404(id)
+        if user:
+            follower_ids = get_followers(user)
             result = {'data': {'attributes': {
-                    'id': followers[0].user_id,
-                    'twitter_id': followers[0].twitter_id,
+                    'id': user.id,
+                    'twitter_id': user.twitter_id,
                     'followers': [follower_ids]
                 }}}
             return result, 200
-        else:
-            # Get from internal user_id to twitter_id
-            user = Users.query.get_or_404(id)
-            if user:
-                all_followers = fetch_followers(user.twitter_id)
-                for follower_id in all_followers:
-                    follower = Followers(id, user.twitter_id, follower_id)
-                    follower.add(follower)
-
-                result = {'data': {'attributes': {
-                        'id': user.id,
-                        'twitter_id': user.twitter_id,
-                        'followers': [all_followers]
-                    }}}
-                return result, 200
-            return response
+        return '{}', 404
 
     '''
         Normally we would have a data model of one twitter id and a list of
