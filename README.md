@@ -27,3 +27,11 @@ python db_manage.py db migrate
 python db_manage.py db upgrade
 python run.py
 ```
+
+
+
+
+
+How often is a retweet retweted - can you measure it?
+Short answer: No, since a retweet always refers directly to the original tweet
+https://twittercommunity.com/t/is-the-retweet-count-for-a-tweet-object-correct-when-it-is-a-retweet/8751
