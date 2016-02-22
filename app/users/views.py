@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.users.models import Users, UsersSchema, db
-from app.twitter_fetch.fetch import fetch_and_create_user_by_id
+from app.twitter_fetch.fetch_network import twitter_screen_name_to_id, fetch_and_create_user_by_id
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
