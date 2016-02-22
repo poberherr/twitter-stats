@@ -14,6 +14,7 @@ class Tweets(db.Model, CRUD):
     in_reply_to_status_id = db.Column(db.BigInteger)
     in_reply_to_user_id = db.Column(db.BigInteger)
     in_reply_to_screen_name = db.Column(db.String(250))
+    is_retweet = db.Column(db.Boolean, default=False)
     is_quote_status = db.Column(db.Boolean)
     retweet_count = db.Column(db.Integer)
     favorite_count = db.Column(db.Integer)
@@ -27,6 +28,10 @@ class Tweets(db.Model, CRUD):
         self.in_reply_to_status_id = tweet_data.in_reply_to_status_id
         self.in_reply_to_user_id = tweet_data.in_reply_to_user_id
         self.in_reply_to_screen_name = tweet_data.in_reply_to_screen_name
+        if hasattr(tweet_data, 'retweeted_status'):
+                self.is_retweet = True
+        else:
+            self.is_retweet = False
         self.is_quote_status = tweet_data.is_quote_status
         self.retweet_count = tweet_data.retweet_count
         self.favorite_count = tweet_data.favorite_count
@@ -42,6 +47,7 @@ class TweetsSchema(Schema):
     in_reply_to_status_id = fields.Integer()
     in_reply_to_user_id = fields.Integer()
     in_reply_to_screen_name = fields.String()
+    is_retweet = fields.Boolean()
     is_quote_status = fields.Boolean()
     retweet_count = fields.Integer()
     favorite_count = fields.Integer()
