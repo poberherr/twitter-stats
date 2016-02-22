@@ -47,12 +47,26 @@ def fetch_user_network(twitter_id, depth, max_depth):
     user = fetch_and_create_user_by_id(twitter_id)
     if depth == 0:
         all_user_followers = get_followers(user)
+        fetch_tweets_by_id(twitter_id)
         for follower in all_user_followers:
             fetch_user_network(follower, depth + 1, max_depth)
     return
 
-def fetch_tweets_by_screen_name(screen_name):
+# TODO: not DRY!
+def fetch_tweets_by_id(id):
     #  TODO: retrieve set of tweet id's and compare with db content_type
     # after finding the 'new' one's: insert
+    tweet_data = api.user_timeline(id=id, count=100)
+    for tweet_data in tweets:
+        tweet = Tweets(tweet_data, user.id)
+        tweet.add(tweet)
+    return
+
+def fetch_tweets_by_screen_name(screen_name):
+    '''
+        I discovered that if a user deletes tweets from his timeline,
+        these tweets are lost; If a user deleted 3 tweets for example
+        you will only retrieve 97.
+    '''
     tweet_data = api.user_timeline(screen_name=screen_name, count=100)
     return tweet_data
