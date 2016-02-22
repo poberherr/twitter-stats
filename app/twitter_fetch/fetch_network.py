@@ -29,8 +29,8 @@ def fetch_and_create_tweets_by_id(twitter_id):
     user = Users.query.filter_by(twitter_id=twitter_id).first()
     print('Creating tweets for twitter_id: ', twitter_id)
     for tweet_data in tweets_data:
-        tweet_exists = Tweets.query.filter_by(tweet_id=tweet_data.id)
-        if tweet_exists == None:
+        tweet_exists = Tweets.query.filter_by(tweet_id=tweet_data.id).first()
+        if not tweet_exists:
             tweet = Tweets(tweet_data, user.id)
             tweet.add(tweet)
     return
