@@ -15,8 +15,10 @@ class FetchTweetsByName(Resource):
         if user:
             tweets = fetch_tweets_by_screen_name(screen_name)
             for tweet_data in tweets:
-                tweet = Tweets(tweet_data, user.id)
-                tweet.add(tweet)
+                tweet = Tweets.query.filter_by(tweet_id=tweet_data.id).first()
+                if not tweet:
+                    tweet = Tweets(tweet_data, user.id)
+                    tweet.add(tweet)
         return
 
-api.add_resource(FetchTweetsByName, '/<screen_name>')      # Retriving fetched users
+api.add_resource(FetchTweetsByName, '/<screen_name>')      # Retriving fetched tweets
