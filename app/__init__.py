@@ -16,20 +16,19 @@ def create_app(config_filename):
     db.init_app(app)
 
     # Blueprints
-    from app.users.views import users
-    app.register_blueprint(users, url_prefix='/users')
-
     from app.followers.views import followers
     app.register_blueprint(followers, url_prefix='/followers')
 
-    from app.fetch_network.views import fetch_network
-    app.register_blueprint(fetch_network, url_prefix='/fetch_network')
+    from app.tweet_statistics.views import tweet_statistics
+    app.register_blueprint(tweet_statistics, url_prefix='/tweet_statistics')
 
     from app.tweets.views import tweets
     app.register_blueprint(tweets, url_prefix='/tweets')
 
-    # Twitter fetch module
-    # TODO: Move twitter module
+    from app.fetch_network.views import fetch_network
+    app.register_blueprint(fetch_network, url_prefix='/fetch_network')
 
+    from app.users.views import users
+    app.register_blueprint(users, url_prefix='/users')
 
     return app
