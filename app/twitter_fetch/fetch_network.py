@@ -64,6 +64,7 @@ def create_followers_if_not_exist(user):
     else:
         try:
             print('Fetching followers for: ', user.screen_name)
+            # TODO: This call fetches 'just' 5000 followers
             follower_ids = api.followers_ids(user.twitter_id)
             print('Inserting followers for: ', user.screen_name)
             for follower_id in follower_ids:
