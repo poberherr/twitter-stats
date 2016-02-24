@@ -27,24 +27,24 @@ def fetch_and_create_tweets_by_id(twitter_id):
     print('Fetching tweets for twitter_id: ', twitter_id)
     tweets_data = api.user_timeline(id=twitter_id, count=100)
     user = Users.query.filter_by(twitter_id=twitter_id).first()
-    print('Creating tweets for twitter_id: ', twitter_id)
     for tweet_data in tweets_data:
         tweet_exists = Tweets.query.filter_by(tweet_id=tweet_data.id).first()
         if not tweet_exists:
+            print('Adding tweets for twitter_id: ', twitter_id)
             tweet = Tweets(tweet_data, user.id)
             tweet.add(tweet)
-    return
 
 def create_user_if_not_exists(user_data):
     user = Users.query.filter_by(twitter_id=user_data.id).first()
     if user:
-        print('User ', user.screen_name, ' was already in DB')
+        print('User ', user.screen_name, ' was already in DB - updating')
+        user.update()
         return user
     else:
         user = Users(user_data)
+        print('Creating user in DB: ', user.screen_name)
         user.add(user)
         user = Users.query.get(user.id)
-        print('Creating user in DB: ', user.screen_name)
     return user
 
 def retrieve_followers_from_db(user):
@@ -80,18 +80,9 @@ def create_followers_if_not_exist(user):
     return follower_ids
 
 def get_complete_user_network(twitter_id):
-    # get user
     print('Fetching user with twitter_id: ', twitter_id)
     user = fetch_and_create_user_by_id(twitter_id)
-
-    # get tweets
     fetch_and_create_tweets_by_id(twitter_id)
-
-    # get all follower id's
     create_followers_if_not_exist(user)
-
-    # take all follower id's and create Users
     for user in tweepy.Cursor(api.followers, id=twitter_id).items():
         current_follower = create_user_if_not_exists(user)
-        # for each follower_id get followers
-        create_followers_if_not_exist(current_follower)
