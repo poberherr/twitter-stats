@@ -1,10 +1,12 @@
 import numpy
+import re
 from collections import Counter
 
 def get_most_frequent_words(tweets):
     all_tweet_text = ''
     for tweet in tweets:
         all_tweet_text = all_tweet_text + ' ' + tweet.text
+    re.sub(r'[^\w]', '', all_tweet_text)
     words = all_tweet_text.split(' ')
     common_words = frozenset((
     'if', 'but', 'and', 'the', 'when', 'use', 'to', 'for',
@@ -13,7 +15,7 @@ def get_most_frequent_words(tweets):
     'from', 'up', 'about', 'into', 'over', 'after', 'beneath',
     'under', 'above', 'me', 'your', 'has', 'can', 'have', '/',
     'the', 'are', 'a', 'that', 'i', 'it', 'not', 'he', 'as', 'you',
-    'this', 'but',
+    'this', 'but', 'some', 'what', 'get', 'man',
     'his', 'they', 'her', 'she', 'or', 'an', 'will', 'my', 'one', 'all', 'would',
     'there', 'their', 'und', 'is', 'die', '', 'für', 'im', 'das', 'ist',
     'du', 'ich', 'nicht', 'die', 'es', 'und', 'sie', 'der', 'was',
