@@ -7,4 +7,4 @@ def make_api():
     auth.set_access_token(config.twitter['atoken'], config.twitter['asecret'])
     return tweepy.API(auth, wait_on_rate_limit=True)
 
-api = make_api()
+twitter_api = make_api()
