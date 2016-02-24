@@ -54,7 +54,6 @@ def retrieve_followers_from_db(user):
         for follower in followers:
             follower_ids.append(follower.twitter_follower_id)
         return follower_ids
-    return
 
 def create_followers_if_not_exist(user):
     # For now we assume the followers don't change
@@ -66,6 +65,7 @@ def create_followers_if_not_exist(user):
             print('Fetching followers for: ', user.screen_name)
             # TODO: This call fetches 'just' 5000 followers
             follower_ids = api.followers_ids(user.twitter_id)
+
             print('Inserting followers for: ', user.screen_name)
             for follower_id in follower_ids:
                 follower = Followers(user.id, user.twitter_id, follower_id)

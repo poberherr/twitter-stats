@@ -110,7 +110,7 @@ class TweetStatistics(Resource):
 
             top_reply_users = Counter([tweet.in_reply_to_screen_name for tweet in tweets\
                 if tweet.in_reply_to_screen_name]).most_common(5)
-            # print('Top users you replied to: ', top_reply_users)
+            print('Top users you replied to: ', top_reply_users)
 
             sources = [tweet.source for tweet in tweets if (tweet.source)]
             stat['user_sources'] = Counter(sources).most_common(10)

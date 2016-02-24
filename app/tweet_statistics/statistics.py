@@ -9,10 +9,10 @@ def get_most_frequent_words(tweets):
     re.sub(r'[^\w]', '', all_tweet_text)
     words = all_tweet_text.split(' ')
     common_words = frozenset((
-    'if', 'but', 'and', 'the', 'when', 'use', 'to', 'for',
-    'via', 'the', 'rt', '-', 'to', 'of', 'in', 'for', 'on', 'with',
-    'at', 'by', 'no', 'yes', '!', 'more', 'still', 'how',
-    'from', 'up', 'about', 'into', 'over', 'after', 'beneath',
+    'if', 'but', 'and', 'the', 'when', 'use', 'to', 'for', 'do', 'be',
+    'via', 'the', 'rt', '-', 'to', 'of', 'in', 'for', 'on', 'with', 'don\'t',
+    'at', 'by', 'no', 'yes', '!', 'more', 'still', 'how', 'just', 'like',
+    'from', 'up', 'about', 'into', 'over', 'after', 'beneath', 'out',
     'under', 'above', 'me', 'your', 'has', 'can', 'have', '/',
     'the', 'are', 'a', 'that', 'i', 'it', 'not', 'he', 'as', 'you',
     'this', 'but', 'some', 'what', 'get', 'man',
