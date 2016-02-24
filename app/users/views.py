@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.users.models import Users, UsersSchema, db
 from app.users.fetch_users import fetch_twitter_screen_name_to_twitter_id,\
-    fetch_and_create_root_user_by_id
+    fetch_and_create_user
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -77,7 +77,7 @@ class UserFetchByName(Resource):
         else:
             twitter_id = fetch_twitter_screen_name_to_twitter_id(screen_name)
             if twitter_id:
-                user = fetch_and_create_root_user_by_id(twitter_id)
+                user = fetch_and_create_user(twitter_id)
                 results = schema.dump(user).data
                 return results, 201
             else:

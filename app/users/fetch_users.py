@@ -18,7 +18,7 @@ def fetch_twitter_screen_name_to_twitter_id(screen_name):
         return user_data.id
 
 # Fetches just the user to be investigated
-def fetch_and_create_root_user_by_id(twitter_id):
+def fetch_and_create_user(twitter_id):
     user = Users.query.filter_by(twitter_id=twitter_id).first()
     if user:
         return user
@@ -28,3 +28,9 @@ def fetch_and_create_root_user_by_id(twitter_id):
         user.add(user)
         user = Users.query.get(user.id)
     return user
+
+def create_users_in_bulk(user):
+    users = []
+    for curr_user in tweepy.Cursor(twitter_api.followers, id=user.twitter_id).items():
+        users.append(fetch_and_create_user(curr_user.id))
+    return users
