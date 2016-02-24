@@ -1,5 +1,4 @@
 __pycache__/
-config.py
 dump.json
-migrations/
 tweet_stream.py
+config.py
