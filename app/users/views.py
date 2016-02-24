@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from app.users.models import Users, UsersSchema, db
-from app.twitter_fetch.fetch_network import twitter_screen_name_to_id, fetch_and_create_user_by_id
+from app.users.fetch_users import fetch_twitter_screen_name_to_twitter_id,\
+    fetch_and_create_root_user_by_id
 from flask_restful import Api, Resource
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -16,6 +17,20 @@ users = Blueprint('users', __name__)
 # https://github.com/marshmallow-code/marshmallow-jsonapi
 schema = UsersSchema()
 api = Api(users)
+
+def create_user_if_not_exists(user_data):
+    user = Users.query.filter_by(twitter_id=user_data.id).first()
+    if user:
+        print('User ', user.screen_name, ' was already in DB - updating')
+        user.update()
+        return user
+    else:
+        user = Users(user_data)
+        print('Creating user in DB: ', user.screen_name)
+        user.add(user)
+        user = Users.query.get(user.id)
+    return user
+
 
 # Users
 class UsersList(Resource):
@@ -36,6 +51,7 @@ class UserFetch(Resource):
         result = schema.dump(user).data
         return result
 
+    # TODO: Test!
     def delete(self, id):
         user = Users.query.get_or_404(id)
         try:
@@ -59,10 +75,13 @@ class UserFetchByName(Resource):
             result = schema.dump(user).data
             return result, 200
         else:
-            twitter_id = twitter_screen_name_to_id(screen_name)
-            user = fetch_and_create_user_by_id(twitter_id)
-            results = schema.dump(user).data
-            return results, 201
+            twitter_id = fetch_twitter_screen_name_to_twitter_id(screen_name)
+            if twitter_id:
+                user = fetch_and_create_root_user_by_id(twitter_id)
+                results = schema.dump(user).data
+                return results, 201
+            else:
+                return 404
 
         # TODO: Call here the fetching of all the friends from the "main" user
         # so that the request can return and the fetching takes place in the

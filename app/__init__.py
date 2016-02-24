@@ -19,14 +19,11 @@ def create_app(config_filename):
     from app.followers.views import followers
     app.register_blueprint(followers, url_prefix='/followers')
 
-    from app.tweet_statistics.views import tweet_statistics
-    app.register_blueprint(tweet_statistics, url_prefix='/tweet_statistics')
+    from app.statistics.views import statistics
+    app.register_blueprint(statistics, url_prefix='/statistics')
 
     from app.tweets.views import tweets
     app.register_blueprint(tweets, url_prefix='/tweets')
-
-    from app.fetch_network.views import fetch_network
-    app.register_blueprint(fetch_network, url_prefix='/fetch_network')
 
     from app.users.views import users
     app.register_blueprint(users, url_prefix='/users')
