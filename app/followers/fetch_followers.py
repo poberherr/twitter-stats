@@ -1,3 +1,5 @@
+import tweepy
+from app.twitter_api import twitter_api
 from app.followers.models import Followers
 
 def fetch_and_create_followers(user):
@@ -9,7 +11,7 @@ def fetch_and_create_followers(user):
         try:
             print('Fetching followers for: ', user.screen_name)
             # TODO: This call fetches 'just' 5000 followers
-            follower_ids = api.followers_ids(user.twitter_id)
+            follower_ids = twitter_api.followers_ids(user.twitter_id)
 
             print('Inserting followers for: ', user.screen_name)
             for follower_id in follower_ids:

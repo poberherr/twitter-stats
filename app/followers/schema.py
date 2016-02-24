@@ -1,5 +1,3 @@
-
-
 def create_follower_schema(user, follower_ids):
     result = {'data': {'attributes': {
             'id': user.id,
