@@ -15,7 +15,7 @@ def get_most_frequent_words(tweets):
     'from', 'up', 'about', 'into', 'over', 'after', 'beneath', 'out',
     'under', 'above', 'me', 'your', 'has', 'can', 'have', '/',
     'the', 'are', 'a', 'that', 'i', 'it', 'not', 'he', 'as', 'you',
-    'this', 'but', 'some', 'what', 'get', 'man',
+    'this', 'but', 'some', 'what', 'get', 'man', '@',
     'his', 'they', 'her', 'she', 'or', 'an', 'will', 'my', 'one', 'all', 'would',
     'there', 'their', 'und', 'is', 'die', '', 'für', 'im', 'das', 'ist',
     'du', 'ich', 'nicht', 'die', 'es', 'und', 'sie', 'der', 'was',
@@ -26,8 +26,6 @@ def get_most_frequent_words(tweets):
     'kann', 'dem', 'bei'))
     lower_words = [word.lower() for word in words if (word.lower() not in common_words)]
     word_counts = Counter(lower_words).most_common(10)
-    # for word in word_counts:
-    #     print(word[0], word[1])
     return word_counts
 
 def get_tweet_data_by_day(tweets):
@@ -62,17 +60,20 @@ def get_tweet_data_by_day(tweets):
     res.append(tweets_per_day)
     res.append(fav_count_per_day)
     # often to big and blurrs info in chart
-    # uncomment to test
     # res.append(retw_count_per_day)
     return res
 
 
 def get_statistics(user, tweets):
     stat = {}
+    try:
+        tweets[0]
+    except IndexError:
+        return stat
+
 
     stat['daily_stats'] = get_tweet_data_by_day(tweets)
     stat['most_words_used'] = get_most_frequent_words(tweets)
-
 
     stat['avg_stars'] = numpy.average([tweet.favorite_count for tweet in tweets])
     stat['mean_stars'] = numpy.mean([tweet.favorite_count for tweet in tweets])
@@ -84,6 +85,7 @@ def get_statistics(user, tweets):
     stat['tweet_count'] = 0
     stat['reply_counter'] = 0
     stat['retweet_counter'] = 0
+    stat['perc_of_own_tweets'] = 0
 
     for tweet in tweets:
         stat['tweet_count'] = stat['tweet_count'] + 1
@@ -94,43 +96,10 @@ def get_statistics(user, tweets):
 
     sources = [tweet.source for tweet in tweets if (tweet.source)]
     stat['user_sources'] = Counter(sources).most_common(10)
+
+    if stat['tweet_count'] != 0:
+        placeholder = 1 - stat['retweet_counter'] / stat['tweet_count']
+        stat['prec_of_own_tweets'] = placeholder
+    else:
+        stat['perc_of_own_tweets'] = 0
     return stat
-
-
-
-
-
-
-
-
-
-
-
-
-#
-#
-#
-# def get_average_stars(tweets):
-#     # favorite_count
-#     avg_stars = numpy.mean([tweet.favorite_count for tweet in tweets])
-#     return avg_stars
-#
-# def get_average_retweets(tweets):
-#     # retweet_count
-#     avg_retweets = numpy.mean([tweet.retweet_count for tweet in tweets])
-#     return avg_retweets
-#
-# def get_percentage_of_responses_by_user(tweets):
-#     # is_reply_to_user_id
-#     response_perc = numpy.persentile([tweet.is_reply_to_user_id for tweet in tweets])
-#     return response_prec
-#
-# def get_percentage_of_user_retweets(tweets):
-#     # is_retweet
-#     retweet_perc = numpy.persentile([tweet.is_retweet for tweet in tweets])
-#     return retweet_perc
-#
-# def get_top_reply_users(tweets):
-#     # in_reply_to_screen_name
-#     top_reply_users = Counter([tweets.screen_name for tweet in tweets])
-#     return top_reply_users

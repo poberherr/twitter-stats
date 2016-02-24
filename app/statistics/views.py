@@ -24,15 +24,6 @@ statistics = Blueprint('statistics', __name__)
 CORS(statistics)
 api = Api(statistics)
 
-#
-# def get_complete_user_network(twitter_id):
-#     print('Fetching user with twitter_id: ', twitter_id)
-#     user = fetch_and_create_user_by_id(twitter_id)
-#     fetch_and_create_tweets(twitter_id)
-#     create_followers_if_not_exist(user)
-#     for user in tweepy.Cursor(api.followers, id=twitter_id).items():
-#         current_follower = create_user_if_not_exists(user)
-
 
 class TweetStatistics(Resource):
 
@@ -49,7 +40,7 @@ class TweetStatistics(Resource):
             follower_ids = fetch_and_create_followers(user)
 
         # could be skipped for better performance
-        users = create_users_in_bulk(user);
+        # users = create_users_in_bulk(user);
         '''
             We have all the follower_ids and need to make a bulk
             lookup to fetch roots users followers to calculate
