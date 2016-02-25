@@ -84,24 +84,33 @@ def get_statistics(user, tweets):
 
     stat['tweet_count'] = 0
     stat['reply_counter'] = 0
-    stat['retweet_counter'] = 0
+    stat['is_a_retweet'] = 0
     stat['perc_of_own_tweets'] = 0
-
-
+    stat['user_got_retweeted_count'] = 0
+    stat['avg_own_tweets_vs_retweeted_count'] = 0
 
     for tweet in tweets:
         stat['tweet_count'] = stat['tweet_count'] + 1
         if tweet.in_reply_to_user_id:
             stat['reply_counter'] = stat['reply_counter'] + 1
         if tweet.is_retweet:
-            stat['retweet_counter'] = stat['retweet_counter'] + 1
+            stat['is_a_retweet'] = stat['is_a_retweet'] + 1
+        else:
+            stat['user_got_retweeted_count'] = \
+                stat['user_got_retweeted_count'] + tweet.retweet_count
+
+
+    if stat['tweet_count'] != 0:
+
+        placeholder = 1 - stat['is_a_retweet'] / stat['tweet_count']
+        stat['perc_of_own_tweets'] = placeholder
+
+        if stat['user_got_retweeted_count'] != 0:
+            stat['avg_own_tweets_vs_retweeted_count'] = \
+            stat['user_got_retweeted_count'] / stat['tweet_count']
+
+
 
     sources = [tweet.source for tweet in tweets if (tweet.source)]
     stat['user_sources'] = Counter(sources).most_common(10)
-
-    if stat['tweet_count'] != 0:
-        placeholder = 1 - stat['retweet_counter'] / stat['tweet_count']
-        stat['perc_of_own_tweets'] = placeholder
-    # else:
-    #     stat['perc_of_own_tweets'] = 0
     return stat
