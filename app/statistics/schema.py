@@ -18,6 +18,7 @@ def create_statistics_schema(user, stat):
             'id': user.id,
             'twitter_id': user.twitter_id,
             'user_got_retweeted_count': stat['user_got_retweeted_count'],
+            'chance_to_reach_a_follower_of_a_follower_per_tweet': round(stat['chance_to_reach_a_follower_of_a_follower_per_tweet'], 2),
             'avg_own_tweets_vs_retweeted_count': round(stat['avg_own_tweets_vs_retweeted_count'], 2),
             'tweets_analysed': stat['tweet_count'],
             'user_devices': user_devices,

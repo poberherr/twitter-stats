@@ -88,6 +88,7 @@ def get_statistics(user, tweets):
     stat['perc_of_own_tweets'] = 0
     stat['user_got_retweeted_count'] = 0
     stat['avg_own_tweets_vs_retweeted_count'] = 0
+    stat['chance_to_reach_a_follower_of_a_follower_per_tweet'] = 0
 
     for tweet in tweets:
         stat['tweet_count'] = stat['tweet_count'] + 1
@@ -108,6 +109,10 @@ def get_statistics(user, tweets):
         if stat['user_got_retweeted_count'] != 0:
             stat['avg_own_tweets_vs_retweeted_count'] = \
             stat['user_got_retweeted_count'] / stat['tweet_count']
+
+        stat['chance_to_reach_a_follower_of_a_follower_per_tweet'] = \
+            (stat['avg_retweets'] * user.followers_count)
+
 
 
 
