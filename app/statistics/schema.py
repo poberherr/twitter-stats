@@ -1,3 +1,6 @@
+from app.users.models import UsersSchema
+user_schema = UsersSchema()
+
 def create_statistics_schema(user, stat):
     if bool(stat):
         keys = ['source', 'count']
@@ -8,6 +11,7 @@ def create_statistics_schema(user, stat):
         stat['tweet_count'] = 0
         stat['perc_of_own_tweets'] = 0
         stat['daily_stats'] = 0
+    user_info = user_schema.dump(user).data
 
     result = {'data': {'attributes': {
             'id': user.id,
@@ -17,5 +21,5 @@ def create_statistics_schema(user, stat):
             'perc_of_own_tweets_vs_retweeted': stat['perc_of_own_tweets'],
             'most_words_used': words_used,
             'stats_per_day': stat['daily_stats']
-        }}}
+        }}, 'user': user_info}
     return result

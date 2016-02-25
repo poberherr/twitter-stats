@@ -87,6 +87,8 @@ def get_statistics(user, tweets):
     stat['retweet_counter'] = 0
     stat['perc_of_own_tweets'] = 0
 
+
+
     for tweet in tweets:
         stat['tweet_count'] = stat['tweet_count'] + 1
         if tweet.in_reply_to_user_id:
@@ -99,7 +101,7 @@ def get_statistics(user, tweets):
 
     if stat['tweet_count'] != 0:
         placeholder = 1 - stat['retweet_counter'] / stat['tweet_count']
-        stat['prec_of_own_tweets'] = placeholder
-    else:
-        stat['perc_of_own_tweets'] = 0
+        stat['perc_of_own_tweets'] = placeholder
+    # else:
+    #     stat['perc_of_own_tweets'] = 0
     return stat
